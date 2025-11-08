@@ -1,0 +1,14 @@
+.{
+    .name = .svengali,
+    .version = "0.0.0",
+    .fingerprint = 0xa4bc6834184ef3b6,
+    .minimum_zig_version = "0.15.1",
+    .dependencies = .{
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "LICENSE",
+    },
+}
