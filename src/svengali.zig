@@ -7,3 +7,4 @@
 pub const arch = @import("arch.zig");
 pub const mem = @import("mem.zig");
 pub const process = @import("process.zig");
+pub const procfs = @import("procfs.zig");
