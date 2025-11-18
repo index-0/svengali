@@ -43,14 +43,14 @@ test findScalar {
 
     {
         var it = findScalar(u8, .eq, mem, 0xe1);
-        try std.testing.expectEqual(@as(?usize, 4), it.first());
+        try std.testing.expectEqual(@as(?usize, 4), it.next());
         try std.testing.expectEqual(@as(?usize, 32), it.next());
         try std.testing.expectEqual(@as(?usize, null), it.next());
     }
 
     {
         var it = findScalar(u8, .gte, mem, 0xe0);
-        try std.testing.expectEqual(@as(?usize, 0), it.first());
+        try std.testing.expectEqual(@as(?usize, 0), it.next());
         try std.testing.expectEqual(@as(?usize, 4), it.next());
         try std.testing.expectEqual(@as(?usize, 22), it.next());
     }
@@ -59,7 +59,7 @@ test findScalar {
         const T: type = u64;
         const typed_mem = std.mem.bytesAsSlice(T, mem[0..(mem.len / @sizeOf(T)) * @sizeOf(T)]);
         var it = findScalar(T, .gte, @alignCast(typed_mem), 0x8300000000000000);
-        try std.testing.expectEqual(@as(?usize, 2), it.first());
+        try std.testing.expectEqual(@as(?usize, 2), it.next());
         try std.testing.expectEqual(@as(?usize, 3), it.next());
         try std.testing.expectEqual(@as(?usize, null), it.next());
     }
@@ -77,14 +77,6 @@ pub fn CompareIterator(comptime T: type, comptime Op: std.math.CompareOperator) 
         msk: std.meta.Int(.unsigned, vec_len),
 
         const Self = @This();
-
-        /// Finds the first match, use `next` to get all subsequent fields.
-        /// Asserts that iteration has not begun and that we have an aligned slice.
-        pub fn first(self: *Self) ?usize {
-            std.debug.assert(self.idx == 0 and self.msk == 0);
-            std.debug.assert(std.mem.isAligned(@intFromPtr(self.buf.ptr), @alignOf(T)));
-            return self.next();
-        }
 
         /// Finds the next index of a matching value. Returns null if no more matches.
         pub fn next(self: *Self) ?usize {
