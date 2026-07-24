@@ -29,6 +29,14 @@ pub const Process = struct {
         return .{ .pid = self.pid };
     }
 
+    pub fn stop(self: Process) std.posix.KillError!void {
+        return std.posix.kill(self.pid, .STOP);
+    }
+
+    pub fn cont(self: Process) std.posix.KillError!void {
+        return std.posix.kill(self.pid, .CONT);
+    }
+
     pub fn vmRead(self: *const Process, sg: []const Sg) VmError!usize {
         return self.vm(.r, sg);
     }
